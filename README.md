@@ -1,2 +1,8 @@
-# play with ml
- play with ml , just by dropping the dataset  use different models , select features , preproces the data and make parameter tuning , save  the model.
+Streamlit’s open-source app framework is the easiest way for data scientists and machine learning engineers to create beautiful, performant apps in only a few hours!  All in pure Python. All for free.
+
+## Dependancies
+
+pip install -r requirements.txt
+
+## Run
+streamlit run main.py
