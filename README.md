@@ -5,4 +5,4 @@ Streamlit’s open-source app framework is the easiest way for data scientists a
 pip install -r requirements.txt
 
 ## Run
-streamlit run main.py
+streamlit run dobby.py
