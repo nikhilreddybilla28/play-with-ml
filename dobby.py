@@ -33,7 +33,9 @@ def main():
         st.subheader("Exploratory Data Analysis & Vizualization ")
         
         data = st.file_uploader("Upload a Dataset", type=["csv", "txt", "xlsx"])
+        
 		if data is not None:
+            
             st.markdown('EDA')
 			df = pd.read_csv(data)
             st.dataframe(df.head())
@@ -75,21 +77,26 @@ def main():
 				    st.success("Generating   {} plot  for {}".format(type_of_plot,selected_columns_names))
 
                     if type_of_plot == 'area':
-                        cust_data = df[ccolumns_names]
+                        cust_data = df[selected_columns_names]
 					    st.area_chart(cust_data)
                         
 				    elif type_of_plot == 'bar':
 					    cust_data = df[selected_columns_names]
 					    st.bar_chart(cust_data)
                 
-                    elif type_of_plot == 'pie':
+                    '''elif type_of_plot == 'pie':
 					    cust_data = df[selected_columns_names]
                         for i in range(len(selected_columns_names))
     					    pie = cust_data[:,i].plot(kind='pie')
 					        st.write(cust_plot)
-					        st.pyplot()
+					        st.pyplot()'''
                     
-    
+                    elif st.checkbox("Pie Plot"):
+				        column_to_plot = st.selectbox("Select 1 Column",selected_columns_names)
+				        pie_plot = df[column_to_plot].value_counts().plot.pie(autopct="%1.1f%%")
+				        st.write(pie_plot)
+				        st.pyplot() 
+                    
 				    elif type_of_plot == 'line':
 					    cust_data = df[selected_columns_names]
 					    st.line_chart(cust_data)
