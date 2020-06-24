@@ -22,10 +22,10 @@ import xgboost
 def main():
 	"""ML App made  with Streamlit """    
     
-    activities = ["EDA &VIZ" , "Modelling"]	
+    activities = ['EDA & VIZ' , 'Modelling']	
     choice = st.sidebar.selectbox("Select Activities",activities)
     
-    if choice == 'EDA &VIZ':
+    if choice == 'EDA & VIZ':
         st.title('Play with ML')
         st.markdown('hey, wanna play with data & ML modles? Then upload a data here..  ')
         st.title('   ')
