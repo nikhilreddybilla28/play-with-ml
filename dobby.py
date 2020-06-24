@@ -33,7 +33,6 @@ def main():
         st.subheader("Exploratory Data Analysis & Vizualization ")
         
         data = st.file_uploader("Upload a Dataset", type=["csv", "txt", "xlsx"])
-        
 		if data is not None:
             st.markdown('EDA')
 			df = pd.read_csv(data)
