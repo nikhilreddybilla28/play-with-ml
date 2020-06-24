@@ -83,13 +83,6 @@ def main():
 		    elif type_of_plot == 'bar':
 		        cust_data = df[selected_columns_names]
 			st.bar_chart(cust_data)
-                
-                    '''elif type_of_plot == 'pie':
-					    cust_data = df[selected_columns_names]
-                        for i in range(len(selected_columns_names))
-    					    pie = cust_data[:,i].plot(kind='pie')
-					        st.write(cust_plot)
-					        st.pyplot()'''
                     
                     elif st.checkbox("Pie Plot"):
 		        column_to_plot = st.selectbox("Select 1 Column",selected_columns_names)
