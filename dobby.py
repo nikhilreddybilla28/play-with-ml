@@ -38,8 +38,7 @@ def main():
 			df = pd.read_csv(data)
             st.dataframe(df.head())
             st.write('shape:',df.shape)
-            
-
+        
 			if st.checkbox("Show Columns"):
 				all_columns = df.columns.to_list()
 				st.write(all_columns)
@@ -63,8 +62,6 @@ def main():
                 st.write(sns.heatmap(df.corr(),annot=True))
 				st.pyplot()
                 
-                
-                
             st.markdown('Data Visualization')
             if st.checkbox("Show Value Counts"):
                 column = st.selectbox("Select a Column",all_columns)
@@ -72,43 +69,43 @@ def main():
                 
                 all_columns_names = df.columns.tolist()
                 lot = st.selectbox("Select Type of Plot",["area","bar","pie","line","hist","box","kde","altair_chart"])
-                columns_names = st.multiselect("Select Columns To Plot",all_columns_names)
+                selected_columns_names = st.multiselect("Select Columns To Plot",all_columns_names)
                 
                 if st.button("Generate Plot"):
 				    st.success("Generating   {} plot  for {}".format(type_of_plot,selected_columns_names))
 
                     if type_of_plot == 'area':
-					cust_data = df[selected_columns_names]
-					st.area_chart(cust_data)
-
-				elif type_of_plot == 'bar':
-					cust_data = df[selected_columns_names]
-					st.bar_chart(cust_data)
+                        cust_data = df[ccolumns_names]
+					    st.area_chart(cust_data)
+                        
+				    elif type_of_plot == 'bar':
+					    cust_data = df[selected_columns_names]
+					    st.bar_chart(cust_data)
                 
-                elif type_of_plot == 'pie':
-					cust_data = df[selected_columns_names]
-                    for i in range(len(selected_columns_names))
-    					pie = cust_data[:,i].plot(kind='pie')
-					    st.write(cust_plot)
-					    st.pyplot()
+                    elif type_of_plot == 'pie':
+					    cust_data = df[selected_columns_names]
+                        for i in range(len(selected_columns_names))
+    					    pie = cust_data[:,i].plot(kind='pie')
+					        st.write(cust_plot)
+					        st.pyplot()
                     
     
-				elif type_of_plot == 'line':
-					cust_data = df[selected_columns_names]
-					st.line_chart(cust_data)
+				    elif type_of_plot == 'line':
+					    cust_data = df[selected_columns_names]
+					    st.line_chart(cust_data)
                     
-                elif type_of_plot == 'altair_chart':
-					a = st.selectbox("Select X axis",all_columns)
-                    b = st.selectbox("Select Y axis",all_columns)
-                    c = st.selectbox("Select a column ",all_columns)
-                    c = alt.Chart(cust_data).mark_circle().encode(x='a', y='b', size='c', color='c', tooltip=['a', 'b', 'c'])
-					st.altair_chart(c, use_container_width=True)
+                    elif type_of_plot == 'altair_chart':
+					    a = st.selectbox("Select X axis",all_columns)
+                        b = st.selectbox("Select Y axis",all_columns)
+                        c = st.selectbox("Select a column ",all_columns)
+                        c = alt.Chart(cust_data).mark_circle().encode(x='a', y='b', size='c', color='c', tooltip=['a', 'b', 'c'])
+					    st.altair_chart(c, use_container_width=True)
 
 				# Custom Plot 
-				elif type_of_plot:
-					cust_plot= df[selected_columns_names].plot(kind=type_of_plot)
-					st.write(cust_plot)
-					st.pyplot()
+				    elif type_of_plot:
+					    cust_plot= df[selected_columns_names].plot(kind=type_of_plot)
+					    st.write(cust_plot)
+					    st.pyplot()
                 
 choice == 'Modelling':   
     pass
