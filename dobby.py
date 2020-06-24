@@ -1,111 +1,130 @@
-# Core Pkgs
-import streamlit as st 
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Jun 24 08:49:48 2020
 
-# EDA Pkgs
-import pandas as pd 
-import numpy as np 
+@author: nikil reddy
+"""
 
+import streamlit as st
 
-# Data Viz Pkg
+import numpy as np
+import pandas as pd
+
+import sklearn
 import matplotlib.pyplot as plt 
 import matplotlib
 matplotlib.use("Agg")
 import seaborn as sns 
 
+import xgboost
 
 
 def main():
-	"""Semi Automated ML App with Streamlit """
-
-	activities = ["EDA","Plots"]	
+	"""ML App made  with Streamlit """
+    st.title('Play with ML')
+    st.markdown('hey, wanna play with data & ML modles? Then upload a data here..  ')
+    
+	activities = ["EDA &VIZ" , "Modelling"]	
 	choice = st.sidebar.selectbox("Select Activities",activities)
-
-	if choice == 'EDA':
-		st.subheader("Exploratory Data Analysis")
-
-		data = st.file_uploader("Upload a Dataset", type=["csv", "txt"])
+    
+    if choice == 'EDA &VIZ':
+		st.subheader("Exploratory Data Analysis & Vizualization ")
+        
+        data = st.file_uploader("Upload a Dataset", type=["csv", "txt", "xlsx"])
+        
 		if data is not None:
+            st.markdown('EDA')
 			df = pd.read_csv(data)
-			st.dataframe(df.head())
-			
-
-			if st.checkbox("Show Shape"):
-				st.write(df.shape)
+            st.dataframe(df.head())
+            st.write('shape:',df.shape)
+            
 
 			if st.checkbox("Show Columns"):
 				all_columns = df.columns.to_list()
 				st.write(all_columns)
-
+                
+            if st.checkbox("Null values"):
+                st.write(df1.isnull().sum())
+                
+            if st.checkbox("Information"):
+				st.write(df.info())
+                
 			if st.checkbox("Summary"):
 				st.write(df.describe())
-
-			if st.checkbox("Show Selected Columns"):
-				selected_columns = st.multiselect("Select Columns",all_columns)
-				new_df = df[selected_columns]
-				st.dataframe(new_df)
-
-			if st.checkbox("Show Value Counts"):
-				st.write(df.iloc[:,-1].value_counts())
-
-			if st.checkbox("Correlation Plot(Matplotlib)"):
-				plt.matshow(df.corr())
+                
+            if st.checkbox("Show Selected Columns"):
+                all_columns_names = df.columns.tolist()
+                selected_columns = st.multiselect("Select Columns",all_columns)
+				df1 = df[selected_columns]
+				st.dataframe(df1)
+                
+            if st.checkbox("Correlation Plot(Seaborn)"):
+                st.write(sns.heatmap(df.corr(),annot=True))
 				st.pyplot()
+                
+                
+                
+            st.markdown('Data Visualization')
+            if st.checkbox("Show Value Counts"):
+                column = st.selectbox("Select a Column",all_columns)
+                st.write(df[column].value_counts().plot(kind='bar'))
+                
+                all_columns_names = df.columns.tolist()
+                lot = st.selectbox("Select Type of Plot",["area","bar","pie","line","hist","box","kde","altair_chart"])
+                columns_names = st.multiselect("Select Columns To Plot",all_columns_names)
+                
+                if st.button("Generate Plot"):
+				    st.success("Generating   {} plot  for {}".format(type_of_plot,selected_columns_names))
 
-			if st.checkbox("Correlation Plot(Seaborn)"):
-				st.write(sns.heatmap(df.corr(),annot=True))
-				st.pyplot()
-
-
-			if st.checkbox("Pie Plot"):
-				all_columns = df.columns.to_list()
-				column_to_plot = st.selectbox("Select 1 Column",all_columns)
-				pie_plot = df[column_to_plot].value_counts().plot.pie(autopct="%1.1f%%")
-				st.write(pie_plot)
-				st.pyplot()
-
-
-
-	elif choice == 'Plots':
-		st.subheader("Data Visualization")
-		data = st.file_uploader("Upload a Dataset", type=["csv", "txt", "xlsx"])
-		if data is not None:
-			df = pd.read_csv(data)
-			st.dataframe(df.head())
-
-
-			if st.checkbox("Show Value Counts"):
-				st.write(df.iloc[:,-1].value_counts().plot(kind='bar'))
-				st.pyplot()
-		
-			# Customizable Plot
-
-			all_columns_names = df.columns.tolist()
-			type_of_plot = st.selectbox("Select Type of Plot",["area","bar","line","hist","box","kde"])
-			selected_columns_names = st.multiselect("Select Columns To Plot",all_columns_names)
-
-			if st.button("Generate Plot"):
-				st.success("Generating Customizable Plot of {} for {}".format(type_of_plot,selected_columns_names))
-
-				# Plot By Streamlit
-				if type_of_plot == 'area':
+                    if type_of_plot == 'area':
 					cust_data = df[selected_columns_names]
 					st.area_chart(cust_data)
 
 				elif type_of_plot == 'bar':
 					cust_data = df[selected_columns_names]
 					st.bar_chart(cust_data)
-
+                
+                elif type_of_plot == 'pie':
+					cust_data = df[selected_columns_names]
+                    for i in range(len(selected_columns_names))
+    					pie = cust_data[:,i].plot(kind='pie')
+					    st.write(cust_plot)
+					    st.pyplot()
+                    
+    
 				elif type_of_plot == 'line':
 					cust_data = df[selected_columns_names]
 					st.line_chart(cust_data)
+                    
+                elif type_of_plot == 'altair_chart':
+					a = st.selectbox("Select X axis",all_columns)
+                    b = st.selectbox("Select Y axis",all_columns)
+                    c = st.selectbox("Select a column ",all_columns)
+                    c = alt.Chart(cust_data).mark_circle().encode(x='a', y='b', size='c', color='c', tooltip=['a', 'b', 'c'])
+					st.altair_chart(c, use_container_width=True)
 
 				# Custom Plot 
 				elif type_of_plot:
 					cust_plot= df[selected_columns_names].plot(kind=type_of_plot)
 					st.write(cust_plot)
 					st.pyplot()
-    
-
-
+                
+choice == 'Modelling':   
+    pass
+            
 if __name__ == '__main__':
 	main()
+           
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
