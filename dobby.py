@@ -22,7 +22,7 @@ import xgboost
 def main():
 	"""ML App made  with Streamlit """    
     
-    activities = ["EDA","Plots"]	
+    activities = ['EDA & VIZ','Modelling']	
     choice = st.sidebar.selectbox("Select Activities",activities)
     
     if choice == 'EDA & VIZ':
