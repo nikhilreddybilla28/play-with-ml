@@ -118,7 +118,7 @@ def main():
             st.write('shape:',df.shape)
             
             st.header('Data Preprocessing')
-            
+            all_columns_names = df.columns.tolist()
             features = st.multiselect("Select feature columns",all_columns)
             X = df[features]
             st.dataframe(X)
