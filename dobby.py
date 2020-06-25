@@ -100,8 +100,9 @@ def main():
                     st.write(cust_plot)
                     st.pyplot()
                     
-choice == 'Modelling':
-    st.write("DO IT DOBBY YOU ARE LATE...")
+    choice == 'Modelling':
+        st.write("DO IT DOBBY YOU ARE LATE...")
+    
     
 if __name__ == '__main__':
     main()
