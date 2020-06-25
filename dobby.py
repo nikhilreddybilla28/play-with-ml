@@ -39,7 +39,7 @@ def main():
                 st.write(all_columns)
                 
             if st.checkbox("Null values"):
-                st.write(df1.isnull().sum())
+                st.write(df.isnull().sum())
                 
             if st.checkbox("Information"):
                 st.write(df.info())
@@ -60,7 +60,7 @@ def main():
             st.markdown('Data Visualization')
             
             if st.checkbox("Show Value Counts"):
-                column = st.selectbox("Select a Column",all_columns)
+                column = st.selectbox("Select a Column to show value counts",all_columns)
                 st.write(df[column].value_counts().plot(kind='bar'))
                 
             all_columns_names = df.columns.tolist()
