@@ -108,7 +108,7 @@ def main():
                     
     if choice == 'Modelling':
         st.header('Training')
-        st.subheader("Hello Iam Dobby. Dobby has no master - Dobby is a free elf. Due to SARS-CoV-2 lockdown I dont have much work to do , So Iam here to make your model.")
+        st.markdown("**_Hello Iam Dobby. Dobby has no master - Dobby is a free elf_**. Due to SARS-CoV-2 lockdown I dont have much work to do , So Iam here to make your model.")
         data = st.file_uploader("Upload a Dataset", type=["csv"])
         
         if data is not None:
@@ -162,7 +162,7 @@ def main():
                 
             st.write('Train - val split')
             number=st.number_input('test split size', min_value=0.00, max_value=1.00)
-            from sklearn.cross_validation import train_test_split  
+            from sklearn. import train_test_split  
             X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = number, random_state = 0)
             st.write(X_train.shape)
             st.write(X_test.shape)
