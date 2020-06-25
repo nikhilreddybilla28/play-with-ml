@@ -197,6 +197,7 @@ def main():
                 p = st.sidebar.selectbox("P",[1,2,3,4])
                 from sklearn.neighbors import KNeighborsClassifier
                 classifier = KNeighborsClassifier(n_neighbors = n_neighbors, metric = 'minkowski', p = p)
+                classifier.fit(X_train, y_train)
                 
             if model == 'SVM':
                 from sklearn.svm import SVC 
@@ -218,7 +219,7 @@ def main():
             y_pred = classifier.predict(X_test)
             from sklearn.metrics import accuracy_score
             acc=accuracy_score(y_test, y_pred)
-            st.subheader('val_accuracy:',acc)
+            st.write('val_accuracy:',acc)
             
             
             from sklearn.metrics import confusion_matrix
