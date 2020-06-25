@@ -162,7 +162,7 @@ def main():
                 
             st.write('Train - val split')
             number=st.number_input('test split size', min_value=0.00, max_value=1.00)
-            from sklearn. import train_test_split  
+            from sklearn.model_selection import train_test_split  
             X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = number, random_state = 0)
             st.write(X_train.shape)
             st.write(X_test.shape)
