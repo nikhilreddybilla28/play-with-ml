@@ -16,7 +16,7 @@ import matplotlib
 matplotlib.use("Agg")
 import seaborn as sns 
 
-import xgboost
+import xgboost as xgb
 
 def main():
     activities =  ["EDA &VIZ" , "Modelling"]
