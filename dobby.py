@@ -100,7 +100,7 @@ def main():
                     st.write(cust_plot)
                     st.pyplot()
                     
-    choice == 'Modelling':
+    if choice == 'Modelling':
         st.write("DO IT DOBBY YOU ARE LATE...")
     
     
