@@ -22,15 +22,22 @@ import xgboost as xgb
 def main():
     activities =  ["EDA &VIZ" , "Modelling"]
     choice = st.sidebar.selectbox("Select Activities",activities)
+    st.checkbox('About')
+    st.markdown("""
+                This is a beta release.This app is maintained by dobby a free elf
+                version: b-0.0.1
+                initial release:27/6/2020
+                """)
     if choice == 'EDA &VIZ':
         st.title('Play with ML')
         
         html_temp1 = """<img src="images/dobby1.jpeg" alt="It's dobby" width="80" height="100">"""
+        st.write("cant see me? I know because i do work from home , You will see me soon")
         st.markdown(html_temp1,unsafe_allow_html=True)
         html_temp = """
         <div style="background-color:coral;padding:12px">
         <h2 style="color:white;text-align:center;"> Play with ML App </h2>
-        <img src="dobby/dobby1.jpeg" alt="It's dobby" width="50" height="60">
+        
         </div>
         """
         st.markdown(html_temp,unsafe_allow_html=True)
@@ -251,6 +258,7 @@ def main():
             
             if st.checkbox("show confusion matrix"):
                 from sklearn.metrics import confusion_matrix
+                y_pred = classifier.predict(X_test)
                 cm = confusion_matrix(y_test, y_pred)
                 st.write(cm)
             
