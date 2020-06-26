@@ -85,7 +85,9 @@ def main():
             
             if st.checkbox("Show Value Counts"):
                 column = st.selectbox("Select a Column to show value counts",all_columns)
+                st.write(df[column].value_counts())
                 st.write(df[column].value_counts().plot(kind='bar'))
+                st.pyplot()
                 
             all_columns_names = df.columns.tolist()
             type_of_plot = st.selectbox("Select Type of Plot",["area","bar","pie","line","hist","box","kde","altair_chart"])
@@ -97,10 +99,12 @@ def main():
                 if type_of_plot == 'area':
                     cust_data = df[selected_columns_names]
                     st.area_chart(cust_data)
+                    st.pyplot()
                     
                 elif type_of_plot == 'bar':
                     cust_data = df[selected_columns_names]
                     st.bar_chart(cust_data)
+                    st.pyplot()
                     
                 elif st.checkbox("Pie Plot"):
                     column_to_plot = st.selectbox("Select 1 Column",selected_columns_names)
@@ -111,6 +115,7 @@ def main():
                 elif type_of_plot == 'line':
                     cust_data = df[selected_columns_names]
                     st.line_chart(cust_data)
+                    st.pyplot()
                     
                 elif type_of_plot == 'altair_chart':
                     a = st.selectbox("Select X axis",all_columns)
@@ -119,6 +124,7 @@ def main():
                     cust_data = pd.DataFram([a,b,c])
                     c = alt.Chart(cust_data).mark_circle().encode(x='a', y='b',size='c', color='c', tooltip=['a', 'b', 'c'])
                     st.altair_chart(c, use_container_width=True)
+                    st.pyplot()
                     
                 elif type_of_plot:
                     cust_plot= df[selected_columns_names].plot(kind=type_of_plot)
@@ -265,7 +271,7 @@ def main():
                 st.write(cm)
                 y_pred = pd.DataFrame(y_pred)
                 st.dataframe(y_pred)
-                st.write(y_pred.value_counts().plot(kind='bar'))
+                st.write(y_pred[0].value_counts().plot(kind='bar'))
                 st.balloons()
 
                     
