@@ -29,8 +29,7 @@ def main():
         <h2 style="color:white;text-align:center;"> Play with ML App </h2>
         </div>
         """
-        st.markdown(html_temp,unsafe_allow_html=True)
-        st.markdown('hey,tired of modelling and tuning ML Models,  wanna play with data & ML modles? Then upload a data here.. **_Dobby , a free elf_** is here for you ')
+        st.header('hey,tired of modelling and tuning ML Models,  wanna play with data & ML modles? Then upload a data here.. **_Dobby , a free elf_** is here for you ')
         st.subheader("Exploratory Data Analysis & Vizualization ")
         data = st.file_uploader("Upload a Dataset", type=["csv"])
         
@@ -138,9 +137,13 @@ def main():
                 
                 radioval = st.radio("choose type",('ffill','statistical')) 
                 
-                if radioval == 'ffill':
-                    X=X.ffill(axis = 0)
-                    st.write('missing values arer filled with ffill')
+                if radioval == 'fbfill':
+                    if st.checkbox("fbfill"):
+                        X=X.ffill(axis = 0)
+                    elif st.checkbox("bfill"):
+                        X=X.ffill(axis = 0)
+                    st.markdown('**_missing values are fb filled_**')
+                    
                     
                 elif radioval == 'statistical':
                     if st.checkbox("handle with mean"):
@@ -157,11 +160,18 @@ def main():
                         selected_columns = st.multiselect("Select Columns to handle with mode",all_columns)
                         X[selected_columns] = X[selected_columns].fillna(X[selected_columns].mode()[0],inplace = True)
                         st.write('handled with mode')
+                    st.markdown('**_missing values are filled statistically_**')
                         
                         
             if st.checkbox("One hot encoding"):
-                X = pd.get_dummies(X)
-                st.write("data is one hot encoded")
+                if st.checkbox("encode features"):
+                    X = pd.get_dummies(X)
+                    st.write("features are one hot encoded")
+                if st.checkbox("encode labels"):
+                    y = pd.get_dummies(y)
+                    st.write("labels are one hot encoded")
+                    st.dataframe(y)
+                
                 
             st.write('Train - val split')
             number=st.number_input('test split size', min_value=0.00, max_value=1.00)
@@ -172,74 +182,71 @@ def main():
             
             
             if st.checkbox("Feature Scaling"):
-                radioval = st.radio("choose type of feature scaling",('Standardization','Normalization'))
+                radioval = st.radio("choose type of feature scaling",('none','Standardization','Normalization'))
+                if radioval == 'none':
+                    st.write("you skipped feature scaling")
                 if radioval == 'Standardization':
                     from sklearn.preprocessing import StandardScaler
                     sc_X = StandardScaler()
                     X_train = sc_X.fit_transform(X_train)
                     X_test = sc_X.transform(X_test)
-                    st.write("features are standardized")
                     #sc_y = StandardScaler()
                     #y_train = sc_y.fit_transform(y_train)
                 if radioval == 'Normalization':
                     min_max_scaler = sklearn.preprocessing.MinMaxScaler()
                     X_train = min_max_scaler.fit_transform(X_train)
                     X_test = min_max_scaler.transform(X_test)
-                    st.write("features are Normalized")
                     
             st.header("Training")
             models=['Logistic Regression','KNN','SVM','Random Forest']
             model = st.selectbox("Select  a model ",models)
             st.sidebar.markdown("Hyperparameter Tuning")
             
-            if st.button("Train"):
-                st.success("Training  {} model ".format(model))
+            if model == 'Logistic Regression':
+                from sklearn.linear_model import LogisticRegression
+                classifier = LogisticRegression(random_state = 0)
+                classifier.fit(X_train, y_train)
                 
-                if model == 'Logistic Regression':
-                    from sklearn.linear_model import LogisticRegression
-                    classifier = LogisticRegression(random_state = 0)
-                    classifier.fit(X_train, y_train)
-                    
-                if model == 'KNN':
-                    n_neighbors = st.sidebar.slider('n_neighbors',min_value=1, max_value=5, step=1)
-                    p = st.sidebar.selectbox("P",[1,2,3,4])
-                    from sklearn.neighbors import KNeighborsClassifier
-                    classifier = KNeighborsClassifier(n_neighbors = n_neighbors, metric = 'minkowski', p = p)
-                    classifier.fit(X_train, y_train)
-                    
-                if model == 'SVM':
-                    from sklearn.svm import SVC
-                    kernel_list = ['linear','poly','rbf','sigmoid']
-                    kernel = st.sidebar.selectbox("P",kernel_list)
-                    C = st.sidebar.slider('C',min_value=1, max_value=6, step=1)
-                    degree = st.sidebar.slider('Degree',min_value=1, max_value=10, step=1)
-                    classifier=SVC(kernel= kernel, C=C, random_state=0, degree=degree)
-                    classifier.fit(X_train,y_train)
-                    
-                if model == 'Random Forest':
-                    from sklearn.ensemble import RandomForestClassifier
-                    criterion = st.sidebar.selectbox("criterion",["gini","entropy"])
-                    n_estimators = st.sidebar.number_input('n_estimators', min_value=1, max_value=500 , step=1)
-                    max_depth = st.sidebar.slider('max_depth', min_value=1, max_value=10, step=1)
-                    classifier = RandomForestClassifier(n_estimators = n_estimators,criterion = criterion, max_depth = max_depth , random_state = 0)
-                    classifier.fit(X_train, y_train)
-                    
+            if model == 'KNN':
+                n_neighbors = st.sidebar.slider('n_neighbors',min_value=1, max_value=5, step=1)
+                p = st.sidebar.selectbox("P",[1,2,3,4])
+                from sklearn.neighbors import KNeighborsClassifier
+                classifier = KNeighborsClassifier(n_neighbors = n_neighbors, metric = 'minkowski', p = p)
+                classifier.fit(X_train, y_train)
+                
+            if model == 'SVM':
+                from sklearn.svm import SVC 
+                kernel_list = ['linear','poly','rbf','sigmoid']
+                kernel = st.sidebar.selectbox("P",kernel_list)
+                C = st.sidebar.slider('C',min_value=1, max_value=6, step=1)
+                degree = st.sidebar.slider('Degree',min_value=1, max_value=10, step=1)
+                classifier=SVC(kernel= kernel, C=C, random_state=0, degree=degree )
+                classifier.fit(X_train,y_train)
+                
+            if model == 'Random Forest':
+                from sklearn.ensemble import RandomForestClassifier
+                criterion = st.sidebar.selectbox("criterion",["gini","entropy"])
+                n_estimators = st.sidebar.number_input('n_estimators', min_value=1, max_value=500 , step=1) 
+                max_depth = st.sidebar.slider('max_depth', min_value=1, max_value=10, step=1)
+                classifier = RandomForestClassifier(n_estimators = n_estimators,criterion = criterion, max_depth = max_depth , random_state = 0)
+                classifier.fit(X_train, y_train)
+            
+            if st.button("Train"):
+                st.success("Training  {} model and predicting on val data ".format(model))
                 y_pred = classifier.predict(X_test)
                 from sklearn.metrics import accuracy_score
                 acc=accuracy_score(y_test, y_pred)
+                st.ballons()
                 st.write('val_accuracy:',acc)
-                
+            
+            if st.checkbox("show confusion matrix"):
                 from sklearn.metrics import confusion_matrix
                 cm = confusion_matrix(y_test, y_pred)
-                st.write('confusion matrix',cm)
-                st.ballons()
-                
-                y_pred = pd.DataFrame(y_pred)
-                st.dataframe(y_pred)
-                st.write(y_pred.value_counts().plot(kind='bar'))
-                st.ballons()
-                
-                
+                st.write(cm)
+            
+            st.write(y_pred.value_counts().plot(kind='bar'))
+            st.ballons()
+            
 
 if __name__ == '__main__':
     main()
