@@ -34,22 +34,21 @@ def main():
                            
                            contact: postme_@hotmail.com
                            """)
-                           
-    html_temp = """
-    <div style="background-color:coral;padding:12px">
-    <h2 style="color:white;text-align:center;"> Play with ML App </h2>
-     </div>
-     """
-     st.markdown(html_temp,unsafe_allow_html=True)
         
     if choice == 'EDA &VIZ':
         st.title('Play with ML')
         
         html_temp1 = """<img src="images/dobby1.jpeg" alt="It's dobby" width="120" height="150">"""
         st.markdown(html_temp1,unsafe_allow_html=True)
-        st.write("can't see dobby ? I know because i do work from home , You will see me soon")
+        st.write("can't see Dobby? I know because i do work from home , You will see me soon")
+        html_temp = """
+        <div style="background-color:coral;padding:12px">
+        <h2 style="color:white;text-align:center;"> Play with ML App </h2>
         
-        st.markdown('hey, tired of modelling and tuning ML Models,  wanna play with data & ML modles? Then upload a dataset here.. **_Dobby , a free elf_** is here for you ')
+        </div>
+        """
+        st.markdown(html_temp,unsafe_allow_html=True)
+        st.markdown('hey,tired of modelling and tuning ML Models,  wanna play with data & ML modles? Then upload a dataset here.. **_Dobby , a free elf_** is here for you ')
         st.subheader("Exploratory Data Analysis & Vizualization ")
         data = st.file_uploader("Upload a Dataset", type=["csv"])
         
@@ -133,6 +132,12 @@ def main():
                     st.pyplot()
                     
     if choice == 'Modelling':
+        html_temp = """
+        <div style="background-color:coral;padding:12px">
+        <h2 style="color:white;text-align:center;"> Play with ML App </h2>
+        </div>
+        """
+        
         st.header('Training')
         st.markdown("**_Hello Iam Dobby. Dobby has no master - Dobby is a free elf_**. Due to SARS-CoV-2 lockdown I dont have much work to do , So Iam here to make your model.")
         data = st.file_uploader("Upload a Dataset", type=["csv"])
