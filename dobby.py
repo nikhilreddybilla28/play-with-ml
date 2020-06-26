@@ -22,18 +22,25 @@ import xgboost as xgb
 def main():
     activities =  ["EDA &VIZ" , "Modelling"]
     choice = st.sidebar.selectbox("Select Activities",activities)
-    st.checkbox('About')
-    st.markdown("""
-                This is a beta release.This app is maintained by dobby a free elf
-                version: b-0.0.1
-                initial release:27/6/2020
-                """)
+    if st.checkbox('About'):
+        st.sidebarmarkdown("""
+                           app work in progress .This is a beta release.
+                           
+                           version: b-0.0.1
+                           
+                           initial release:27/6/2020
+                           
+                           helpful suggestions are welcome.
+                           
+                           contact: postme_@hotmail.com
+                           """)
+        
     if choice == 'EDA &VIZ':
         st.title('Play with ML')
         
-        html_temp1 = """<img src="images/dobby1.jpeg" alt="It's dobby" width="80" height="100">"""
-        st.write("cant see me? I know because i do work from home , You will see me soon")
+        html_temp1 = """<img src="images/dobby1.jpeg" alt="It's dobby" width="120" height="150">"""
         st.markdown(html_temp1,unsafe_allow_html=True)
+        st.write("cant see me? I know because i do work from home , You will see me soon")
         html_temp = """
         <div style="background-color:coral;padding:12px">
         <h2 style="color:white;text-align:center;"> Play with ML App </h2>
@@ -247,24 +254,25 @@ def main():
                 with st.spinner('model is training...'):
                     classifier.fit(X_train, y_train)
                 st.success('Model trained!')
-                st.balloons()
-                    
-                
+                 
                 y_pred = classifier.predict(X_test)
                 from sklearn.metrics import accuracy_score
                 acc=accuracy_score(y_test, y_pred)
                 st.balloons()
                 st.write('val_accuracy:',acc)
+                
+                if st.checkbox("show confusion matrix"):
+                    from sklearn.metrics import confusion_matrix
+                    y_pred = classifier.predict(X_test)
+                    cm = confusion_matrix(y_test, y_pred)
+                    st.write(cm)
+                    y_pred = pd.DataFrame(y_pred)
+                    st.dataframe(y_pred)
+                    st.write(y_pred.value_counts().plot(kind='bar'))
+                    st.balloons()
             
-            if st.checkbox("show confusion matrix"):
-                from sklearn.metrics import confusion_matrix
-                y_pred = classifier.predict(X_test)
-                cm = confusion_matrix(y_test, y_pred)
-                st.write(cm)
             
-            st.write(y_pred.value_counts().plot(kind='bar'))
-            
-
+                
 if __name__ == '__main__':
     main()
 
