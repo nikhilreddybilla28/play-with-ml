@@ -271,9 +271,9 @@ def main():
             if model == 'XgBoostClassifier':
                 from xgboost import XGBClassifier
                 n_estimators = st.sidebar.number_input('n_estimators', min_value=1, max_value=2000)
-                reg_lambda = st.sidebar.number_input('n_estimators', min_value=0.01, max_value=5 , step=0.02)
+                reg_lambda = st.sidebar.number_input('n_estimators', min_value=0.01, max_value=5.00 , step=0.02)
                 max_depth = st.sidebar.slider('max_depth', min_value=1, max_value=10, step=1)
-                colsample_bytree = st.sidebar.number_input('colsample_bytree', min_value=0.5, max_value=1.00 , step=0.05)
+                colsample_bytree = st.sidebar.number_input('colsample_bytree', min_value=0.50, max_value=1.00 , step=0.05)
                 classifier = XGBClassifier(n_estimators=n_estimators,reg_lambda=reg_lambda,max_depth=max_depth,colsample_bytree=colsample_bytree)
             
             if st.button("Train"):
@@ -291,7 +291,8 @@ def main():
                 st.write(cm)
                 y_pred = pd.DataFrame(y_pred)
                 st.dataframe(y_pred)
-                st.bar_chart(y_pred[0])
+                st.write(y_pred[0].value_counts())
+                st.write(y_pred[0].value_counts().plot(kind='bar'))
                 st.pyplot()
                 st.balloons()
 
