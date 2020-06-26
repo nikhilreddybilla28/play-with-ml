@@ -22,8 +22,8 @@ import xgboost as xgb
 def main():
     activities =  ["EDA &VIZ" , "Modelling"]
     choice = st.sidebar.selectbox("Select Activities",activities)
-    if st.checkbox('About'):
-        st.sidebarmarkdown("""
+    if st.sidebar.checkbox('About'):
+        st.sidebar.markdown("""
                            app work in progress .This is a beta release.
                            
                            version: b-0.0.1
@@ -258,20 +258,18 @@ def main():
                 y_pred = classifier.predict(X_test)
                 from sklearn.metrics import accuracy_score
                 acc=accuracy_score(y_test, y_pred)
-                st.balloons()
                 st.write('val_accuracy:',acc)
-                
-                if st.checkbox("show confusion matrix"):
-                    from sklearn.metrics import confusion_matrix
-                    y_pred = classifier.predict(X_test)
-                    cm = confusion_matrix(y_test, y_pred)
-                    st.write(cm)
-                    y_pred = pd.DataFrame(y_pred)
-                    st.dataframe(y_pred)
-                    st.write(y_pred.value_counts().plot(kind='bar'))
-                    st.balloons()
-            
-            
+                from sklearn.metrics import confusion_matrix
+                cm = confusion_matrix(y_test, y_pred)
+                st.markdown("**_confusion matrix_**")
+                st.write(cm)
+                y_pred = pd.DataFrame(y_pred)
+                st.dataframe(y_pred)
+                st.write(y_pred.value_counts().plot(kind='bar'))
+                st.balloons()
+
+                    
+                         
                 
 if __name__ == '__main__':
     main()
