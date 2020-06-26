@@ -140,6 +140,7 @@ def main():
                 
                 if radioval == 'ffill':
                     X=X.ffill(axis = 0)
+                    st.write('missing values arer filled with ffill')
                     
                 elif radioval == 'statistical':
                     if st.checkbox("handle with mean"):
@@ -160,6 +161,7 @@ def main():
                         
             if st.checkbox("One hot encoding"):
                 X = pd.get_dummies(X)
+                st.write("data is one hot encoded")
                 
             st.write('Train - val split')
             number=st.number_input('test split size', min_value=0.00, max_value=1.00)
@@ -176,12 +178,14 @@ def main():
                     sc_X = StandardScaler()
                     X_train = sc_X.fit_transform(X_train)
                     X_test = sc_X.transform(X_test)
+                    st.write("features are standardized")
                     #sc_y = StandardScaler()
                     #y_train = sc_y.fit_transform(y_train)
                 if radioval == 'Normalization':
                     min_max_scaler = sklearn.preprocessing.MinMaxScaler()
                     X_train = min_max_scaler.fit_transform(X_train)
                     X_test = min_max_scaler.transform(X_test)
+                    st.write("features are Normalized")
                     
             st.header("Training")
             models=['Logistic Regression','KNN','SVM','Random Forest']
@@ -189,7 +193,7 @@ def main():
             st.sidebar.markdown("Hyperparameter Tuning")
             
             if st.button("Train"):
-                st.success("Training  {} model  for {}".format(model ,selected_columns_names))
+                st.success("Training  {} model ".format(model))
                 
                 if model == 'Logistic Regression':
                     from sklearn.linear_model import LogisticRegression
