@@ -106,7 +106,7 @@ def main():
                     st.bar_chart(cust_data)
                     st.pyplot()
                     
-                elif st.checkbox("Pie Plot"):
+                elif type_of_plot == "Pie Plot":
                     column_to_plot = st.selectbox("Select 1 Column",selected_columns_names)
                     pie_plot = df[column_to_plot].value_counts().plot.pie(autopct="%1.1f%%")
                     st.write(pie_plot)
@@ -121,7 +121,7 @@ def main():
                     a = st.selectbox("Select X axis",all_columns)
                     b = st.selectbox("Select Y axis",all_columns)
                     c = st.selectbox("Select a column ",all_columns)
-                    cust_data = pd.DataFram([a,b,c])
+                    cust_data = pd.DataFrame([a,b,c])
                     c = alt.Chart(cust_data).mark_circle().encode(x='a', y='b',size='c', color='c', tooltip=['a', 'b', 'c'])
                     st.altair_chart(c, use_container_width=True)
                     st.pyplot()
@@ -199,7 +199,7 @@ def main():
                 
                 
             st.write('Train - val split')
-            number=st.number_input('test split size', min_value=0.00, max_value=1.00)
+            number=st.number_input('test split size', min_value=0.05, max_value=1.00)
             from sklearn.model_selection import train_test_split  
             X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = number, random_state = 0)
             st.write(X_train.shape)
@@ -247,14 +247,28 @@ def main():
                 degree = st.sidebar.slider('Degree',min_value=1, max_value=10, step=1)
                 classifier=SVC(kernel= kernel, C=C, random_state=0, degree=degree )
                 
+            if model == 'DecisionTree':
+                from sklearn.tree import DecisionTreeClassifier
+                criterion = st.sidebar.selectbox("criterion",["gini","entropy"])
+                max_depth = st.sidebar.slider('max_depth', min_value=1, max_value=10, step=1)
+                min_samples_leaf = st.sidebar.slider('min_samples_leaf', min_value=1, max_value=10, step=1)
+                classifier = DecisionTreeClassifier(criterion = criterion, max_depth = max_depth ,min_samples_leaf=min_samples_leaf,random_state = 0)
                 
-            if model == 'Random Forest':
+                
+            if model == 'Random Forest Classifier':
                 from sklearn.ensemble import RandomForestClassifier
                 criterion = st.sidebar.selectbox("criterion",["gini","entropy"])
                 n_estimators = st.sidebar.number_input('n_estimators', min_value=1, max_value=500 , step=1) 
                 max_depth = st.sidebar.slider('max_depth', min_value=1, max_value=10, step=1)
                 classifier = RandomForestClassifier(n_estimators = n_estimators,criterion = criterion, max_depth = max_depth , random_state = 0)
                 
+            if model == 'XgBoostClassifier':
+                from xgboost import XGBClassifier
+                n_estimators = st.sidebar.number_input('n_estimators', min_value=1, max_value=2000)
+                reg_lambda = st.sidebar.number_input('n_estimators', min_value=0.01, max_value=5 , step=0.02)
+                max_depth = st.sidebar.slider('max_depth', min_value=1, max_value=10, step=1)
+                colsample_bytree = st.sidebar.number_input('colsample_bytree', min_value=0.5, max_value=1.00 , step=0.05)
+                classifier = XGBClassifier(n_estimators=n_estimators,reg_lambda=reg_lambda,max_depth=max_depth,colsample_bytree=colsample_bytree)
             
             if st.button("Train"):
                 with st.spinner('model is training...'):
@@ -271,7 +285,8 @@ def main():
                 st.write(cm)
                 y_pred = pd.DataFrame(y_pred)
                 st.dataframe(y_pred)
-                st.write(y_pred[0].value_counts().plot(kind='bar'))
+                st.bar_chart(y_pred[0])
+                st.pyplot()
                 st.balloons()
 
                     
