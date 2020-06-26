@@ -34,21 +34,22 @@ def main():
                            
                            contact: postme_@hotmail.com
                            """)
+                           
+    html_temp = """
+    <div style="background-color:coral;padding:12px">
+    <h2 style="color:white;text-align:center;"> Play with ML App </h2>
+     </div>
+     """
+     st.markdown(html_temp,unsafe_allow_html=True)
         
     if choice == 'EDA &VIZ':
         st.title('Play with ML')
         
         html_temp1 = """<img src="images/dobby1.jpeg" alt="It's dobby" width="120" height="150">"""
         st.markdown(html_temp1,unsafe_allow_html=True)
-        st.write("cant see me? I know because i do work from home , You will see me soon")
-        html_temp = """
-        <div style="background-color:coral;padding:12px">
-        <h2 style="color:white;text-align:center;"> Play with ML App </h2>
+        st.write("can't see dobby ? I know because i do work from home , You will see me soon")
         
-        </div>
-        """
-        st.markdown(html_temp,unsafe_allow_html=True)
-        st.markdown('hey,tired of modelling and tuning ML Models,  wanna play with data & ML modles? Then upload a dataset here.. **_Dobby , a free elf_** is here for you ')
+        st.markdown('hey, tired of modelling and tuning ML Models,  wanna play with data & ML modles? Then upload a dataset here.. **_Dobby , a free elf_** is here for you ')
         st.subheader("Exploratory Data Analysis & Vizualization ")
         data = st.file_uploader("Upload a Dataset", type=["csv"])
         
@@ -223,7 +224,7 @@ def main():
                     X_test = min_max_scaler.transform(X_test)
                     
             st.header("Training")
-            models=['Logistic Regression','KNN','SVM','Random Forest']
+            models=['Logistic Regression','KNN','SVM','DecisionTree','Random Forest','XgBoostClassifier']
             model = st.selectbox("Select  a model ",models)
             st.sidebar.markdown("Hyperparameter Tuning")
             
