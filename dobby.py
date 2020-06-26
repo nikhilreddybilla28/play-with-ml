@@ -24,12 +24,15 @@ def main():
     choice = st.sidebar.selectbox("Select Activities",activities)
     if choice == 'EDA &VIZ':
         st.title('Play with ML')
+        
         html_temp = """
-        <div style="background-color:tomato;padding:12px">
+        <div style="background-color:coral;padding:12px">
         <h2 style="color:white;text-align:center;"> Play with ML App </h2>
+        <img src="dobby/dobby1.jpg" alt="It's dobby" width="50" height="60">
         </div>
         """
-        st.header('hey,tired of modelling and tuning ML Models,  wanna play with data & ML modles? Then upload a data here.. **_Dobby , a free elf_** is here for you ')
+        st.markdown(html_temp,unsafe_allow_html=True)
+        st.markdown('hey,tired of modelling and tuning ML Models,  wanna play with data & ML modles? Then upload a dataset here.. **_Dobby , a free elf_** is here for you ')
         st.subheader("Exploratory Data Analysis & Vizualization ")
         data = st.file_uploader("Upload a Dataset", type=["csv"])
         
