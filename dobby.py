@@ -29,7 +29,8 @@ def main():
         <h2 style="color:white;text-align:center;"> Play with ML App </h2>
         </div>
         """
-        st.header('hey,tired of modelling and tuning ML Models,  wanna play with data & ML modles? Then upload a data here.. **_Dobby , a free elf_** is here for you ')
+        st.markdown(html_temp,unsafe_allow_html=True)
+        st.markdown('hey,tired of modelling and tuning ML Models,  wanna play with data & ML modles? Then upload a data here.. **_Dobby , a free elf_** is here for you ')
         st.subheader("Exploratory Data Analysis & Vizualization ")
         data = st.file_uploader("Upload a Dataset", type=["csv"])
         
@@ -187,48 +188,54 @@ def main():
             model = st.selectbox("Select  a model ",models)
             st.sidebar.markdown("Hyperparameter Tuning")
             
-            if model == 'Logistic Regression':
-                from sklearn.linear_model import LogisticRegression
-                classifier = LogisticRegression(random_state = 0)
-                classifier.fit(X_train, y_train)
+            if st.button("Train"):
+                st.success("Training  {} model  for {}".format(model ,selected_columns_names))
                 
-            if model == 'KNN':
-                n_neighbors = st.sidebar.slider('n_neighbors',min_value=1, max_value=5, step=1)
-                p = st.sidebar.selectbox("P",[1,2,3,4])
-                from sklearn.neighbors import KNeighborsClassifier
-                classifier = KNeighborsClassifier(n_neighbors = n_neighbors, metric = 'minkowski', p = p)
-                classifier.fit(X_train, y_train)
+                if model == 'Logistic Regression':
+                    from sklearn.linear_model import LogisticRegression
+                    classifier = LogisticRegression(random_state = 0)
+                    classifier.fit(X_train, y_train)
+                    
+                if model == 'KNN':
+                    n_neighbors = st.sidebar.slider('n_neighbors',min_value=1, max_value=5, step=1)
+                    p = st.sidebar.selectbox("P",[1,2,3,4])
+                    from sklearn.neighbors import KNeighborsClassifier
+                    classifier = KNeighborsClassifier(n_neighbors = n_neighbors, metric = 'minkowski', p = p)
+                    classifier.fit(X_train, y_train)
+                    
+                if model == 'SVM':
+                    from sklearn.svm import SVC
+                    kernel_list = ['linear','poly','rbf','sigmoid']
+                    kernel = st.sidebar.selectbox("P",kernel_list)
+                    C = st.sidebar.slider('C',min_value=1, max_value=6, step=1)
+                    degree = st.sidebar.slider('Degree',min_value=1, max_value=10, step=1)
+                    classifier=SVC(kernel= kernel, C=C, random_state=0, degree=degree)
+                    classifier.fit(X_train,y_train)
+                    
+                if model == 'Random Forest':
+                    from sklearn.ensemble import RandomForestClassifier
+                    criterion = st.sidebar.selectbox("criterion",["gini","entropy"])
+                    n_estimators = st.sidebar.number_input('n_estimators', min_value=1, max_value=500 , step=1)
+                    max_depth = st.sidebar.slider('max_depth', min_value=1, max_value=10, step=1)
+                    classifier = RandomForestClassifier(n_estimators = n_estimators,criterion = criterion, max_depth = max_depth , random_state = 0)
+                    classifier.fit(X_train, y_train)
+                    
+                y_pred = classifier.predict(X_test)
+                from sklearn.metrics import accuracy_score
+                acc=accuracy_score(y_test, y_pred)
+                st.write('val_accuracy:',acc)
                 
-            if model == 'SVM':
-                from sklearn.svm import SVC 
-                kernel_list = ['linear','poly','rbf','sigmoid']
-                kernel = st.sidebar.selectbox("P",kernel_list)
-                C = st.sidebar.slider('C',min_value=1, max_value=6, step=1)
-                degree = st.sidebar.slider('Degree',min_value=1, max_value=10, step=1)
-                classifier=SVC(kernel= kernel, C=C, random_state=0, degree=degree )
-                classifier.fit(X_train,y_train)
+                from sklearn.metrics import confusion_matrix
+                cm = confusion_matrix(y_test, y_pred)
+                st.write('confusion matrix',cm)
+                st.ballons()
                 
-            if model == 'Random Forest':
-                from sklearn.ensemble import RandomForestClassifier
-                criterion = st.sidebar.selectbox("criterion",["gini","entropy"])
-                n_estimators = st.sidebar.number_input('n_estimators', min_value=1, max_value=500 , step=1) 
-                max_depth = st.sidebar.slider('max_depth', min_value=1, max_value=10, step=1)
-                classifier = RandomForestClassifier(n_estimators = n_estimators,criterion = criterion, max_depth = max_depth , random_state = 0)
-                classifier.fit(X_train, y_train)
+                y_pred = pd.DataFrame(y_pred)
+                st.dataframe(y_pred)
+                st.write(y_pred.value_counts().plot(kind='bar'))
+                st.ballons()
                 
-            y_pred = classifier.predict(X_test)
-            from sklearn.metrics import accuracy_score
-            acc=accuracy_score(y_test, y_pred)
-            st.write('val_accuracy:',acc)
-            
-            
-            from sklearn.metrics import confusion_matrix
-            cm = confusion_matrix(y_test, y_pred)
-            st.write(cm)
-            
-            st.write(y_pred.value_counts().plot(kind='bar'))
-            st.ballons()
-            
+                
 
 if __name__ == '__main__':
     main()
