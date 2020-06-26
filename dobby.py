@@ -25,10 +25,12 @@ def main():
     if choice == 'EDA &VIZ':
         st.title('Play with ML')
         
+        html_temp1 = """<img src="images/dobby1.jpeg" alt="It's dobby" width="80" height="100">"""
+        st.markdown(html_temp1,unsafe_allow_html=True)
         html_temp = """
         <div style="background-color:coral;padding:12px">
         <h2 style="color:white;text-align:center;"> Play with ML App </h2>
-        <img src="dobby/dobby1.jpg" alt="It's dobby" width="50" height="60">
+        <img src="dobby/dobby1.jpeg" alt="It's dobby" width="50" height="60">
         </div>
         """
         st.markdown(html_temp,unsafe_allow_html=True)
@@ -208,14 +210,14 @@ def main():
             if model == 'Logistic Regression':
                 from sklearn.linear_model import LogisticRegression
                 classifier = LogisticRegression(random_state = 0)
-                classifier.fit(X_train, y_train)
+                
                 
             if model == 'KNN':
                 n_neighbors = st.sidebar.slider('n_neighbors',min_value=1, max_value=5, step=1)
                 p = st.sidebar.selectbox("P",[1,2,3,4])
                 from sklearn.neighbors import KNeighborsClassifier
                 classifier = KNeighborsClassifier(n_neighbors = n_neighbors, metric = 'minkowski', p = p)
-                classifier.fit(X_train, y_train)
+                
                 
             if model == 'SVM':
                 from sklearn.svm import SVC 
@@ -224,7 +226,7 @@ def main():
                 C = st.sidebar.slider('C',min_value=1, max_value=6, step=1)
                 degree = st.sidebar.slider('Degree',min_value=1, max_value=10, step=1)
                 classifier=SVC(kernel= kernel, C=C, random_state=0, degree=degree )
-                classifier.fit(X_train,y_train)
+                
                 
             if model == 'Random Forest':
                 from sklearn.ensemble import RandomForestClassifier
@@ -232,14 +234,19 @@ def main():
                 n_estimators = st.sidebar.number_input('n_estimators', min_value=1, max_value=500 , step=1) 
                 max_depth = st.sidebar.slider('max_depth', min_value=1, max_value=10, step=1)
                 classifier = RandomForestClassifier(n_estimators = n_estimators,criterion = criterion, max_depth = max_depth , random_state = 0)
-                classifier.fit(X_train, y_train)
+                
             
             if st.button("Train"):
-                st.success("Training  {} model and predicting on val data ".format(model))
+                with st.spinner('model is training...'):
+                    classifier.fit(X_train, y_train)
+                st.success('Model trained!')
+                st.balloons()
+                    
+                
                 y_pred = classifier.predict(X_test)
                 from sklearn.metrics import accuracy_score
                 acc=accuracy_score(y_test, y_pred)
-                st.ballons()
+                st.balloons()
                 st.write('val_accuracy:',acc)
             
             if st.checkbox("show confusion matrix"):
@@ -248,7 +255,6 @@ def main():
                 st.write(cm)
             
             st.write(y_pred.value_counts().plot(kind='bar'))
-            st.ballons()
             
 
 if __name__ == '__main__':
