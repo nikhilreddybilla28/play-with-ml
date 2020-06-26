@@ -261,7 +261,7 @@ def main():
                 classifier = DecisionTreeClassifier(criterion = criterion, max_depth = max_depth ,min_samples_leaf=min_samples_leaf,random_state = 0)
                 
                 
-            if model == 'Random Forest Classifier':
+            if model == 'Random Forest':
                 from sklearn.ensemble import RandomForestClassifier
                 criterion = st.sidebar.selectbox("criterion",["gini","entropy"])
                 n_estimators = st.sidebar.number_input('n_estimators', min_value=1, max_value=500 , step=1) 
@@ -271,7 +271,7 @@ def main():
             if model == 'XgBoostClassifier':
                 from xgboost import XGBClassifier
                 n_estimators = st.sidebar.number_input('n_estimators', min_value=1, max_value=2000)
-                reg_lambda = st.sidebar.number_input('n_estimators', min_value=0.01, max_value=5.00 , step=0.02)
+                reg_lambda = st.sidebar.number_input('reg_lambda', min_value=0.01, max_value=5.00 , step=0.02)
                 max_depth = st.sidebar.slider('max_depth', min_value=1, max_value=10, step=1)
                 colsample_bytree = st.sidebar.number_input('colsample_bytree', min_value=0.50, max_value=1.00 , step=0.05)
                 classifier = XGBClassifier(n_estimators=n_estimators,reg_lambda=reg_lambda,max_depth=max_depth,colsample_bytree=colsample_bytree)
