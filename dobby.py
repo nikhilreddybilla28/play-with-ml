@@ -19,6 +19,9 @@ import altair as alt
 
 import xgboost as xgb
 
+import pickle
+import base64
+
 def main():
     activities =  ["EDA &VIZ" , "Modelling"]
     choice = st.sidebar.selectbox("Select Activities",activities)
@@ -295,9 +298,21 @@ def main():
                 st.write(y_pred[0].value_counts().plot(kind='bar'))
                 st.pyplot()
                 st.balloons()
+                
+            def download_model(model):
+                output_model = pickle.dumps(model)
+                b64 = base64.b64encode(output_model).decode()
+                href = f'<a href="data:file/output_model;base64,{b64}">Download Trained Model .pkl File</a> (right-click and save as &lt;some_name&gt;.pkl)'
+                st.markdown(href, unsafe_allow_html=True)
+            
+            if st.button("save & Download model"):
+                download_model(classifier)
+                st.write("model saved as output_model ")
+                
+            
+                
 
-                    
-                         
+                       
                 
 if __name__ == '__main__':
     main()
