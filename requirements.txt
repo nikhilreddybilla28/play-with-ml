@@ -6,3 +6,5 @@ seaborn==0.9.0
 scikit-learn==0.22.1
 xgboost==1.1.1
 altair==4.1.0
+pickle
+base64
