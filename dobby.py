@@ -301,13 +301,14 @@ def main():
                 
             def download_model(model):
                 output_model = pickle.dumps(model)
+                st.write("model saved as output_model ")
                 b64 = base64.b64encode(output_model).decode()
-                href = f'<a href="data:file/output_model;base64,{b64}">Download Trained Model .pkl File</a> (right-click and save as &lt;some_name&gt;.pkl)'
+                href = f'<a href="data:file/output_model;base64,{b64}">Download Trained Model</a>'
                 st.markdown(href, unsafe_allow_html=True)
             
             if st.button("save & Download model"):
                 download_model(classifier)
-                st.write("model saved as output_model ")
+                
                 
             
                 
