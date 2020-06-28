@@ -279,6 +279,7 @@ def main():
                 colsample_bytree = st.sidebar.number_input('colsample_bytree', min_value=0.50, max_value=1.00 , step=0.05)
                 classifier = XGBClassifier(n_estimators=n_estimators,reg_lambda=reg_lambda,max_depth=max_depth,colsample_bytree=colsample_bytree)
             
+            
             if st.button("Train"):
                 with st.spinner('model is training...'):
                     classifier.fit(X_train, y_train)
@@ -299,18 +300,15 @@ def main():
                 st.pyplot()
                 st.balloons()
                 
-            def download_model(model):
-                output_model = pickle.dumps(model)
-                st.write("model saved as output_model ")
-                b64 = base64.b64encode(output_model).decode()
-                href = f'<a href="data:file/output_model;base64,{b64}">Download Trained Model</a>'
-                st.markdown(href, unsafe_allow_html=True)
-            
-            if st.button("save & Download model"):
-                download_model(classifier)
+                def download_model(model):
+                    output_model = pickle.dumps(model)
+                    st.write("model saved as output_model ")
+                    b64 = base64.b64encode(output_model).decode()
+                    href = f'<a href="data:file/output_model;base64,{b64}">Download Trained Model</a>'
+                    st.markdown(href, unsafe_allow_html=True)
                 
-                
-            
+                if st.button("save & Download model"):
+                    download_model(classifier)
                 
 
                        
