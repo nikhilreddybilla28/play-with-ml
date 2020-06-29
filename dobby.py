@@ -43,7 +43,6 @@ def main():
         
         html_temp1 = """<img src="images/dobby1.jpeg" alt="It's dobby" width="120" height="150">"""
         st.markdown(html_temp1,unsafe_allow_html=True)
-        st.write("can't see Dobby? I know because i do work from home , You will see me soon")
         html_temp = """
         <div style="background-color:coral;padding:12px">
         <h2 style="color:white;text-align:center;"> Play with ML App </h2>
@@ -232,89 +231,164 @@ def main():
                     X_test = min_max_scaler.transform(X_test)
                     
             st.header("Training")
-            models=['Logistic Regression','KNN','SVM','DecisionTree','Random Forest','XgBoostClassifier']
-            model = st.selectbox("Select  a model ",models)
+            problem_types=['Regression','Classification']
+            problem_type = st.selectbox("Select Problem Type ",problem_types)
             st.sidebar.markdown("Hyperparameter Tuning")
             
-            if model == 'Logistic Regression':
-                from sklearn.linear_model import LogisticRegression
-                classifier = LogisticRegression(random_state = 0)
-                
-                
-            if model == 'KNN':
-                n_neighbors = st.sidebar.slider('n_neighbors',min_value=1, max_value=5, step=1)
-                p = st.sidebar.selectbox("P",[1,2,3,4])
-                from sklearn.neighbors import KNeighborsClassifier
-                classifier = KNeighborsClassifier(n_neighbors = n_neighbors, metric = 'minkowski', p = p)
-                
-                
-            if model == 'SVM':
-                from sklearn.svm import SVC 
-                kernel_list = ['linear','poly','rbf','sigmoid']
-                kernel = st.sidebar.selectbox("P",kernel_list)
-                C = st.sidebar.slider('C',min_value=1, max_value=6, step=1)
-                degree = st.sidebar.slider('Degree',min_value=1, max_value=10, step=1)
-                classifier=SVC(kernel= kernel, C=C, random_state=0, degree=degree )
-                
-            if model == 'DecisionTree':
-                from sklearn.tree import DecisionTreeClassifier
-                criterion = st.sidebar.selectbox("criterion",["gini","entropy"])
-                max_depth = st.sidebar.slider('max_depth', min_value=1, max_value=10, step=1)
-                min_samples_leaf = st.sidebar.slider('min_samples_leaf', min_value=1, max_value=10, step=1)
-                classifier = DecisionTreeClassifier(criterion = criterion, max_depth = max_depth ,min_samples_leaf=min_samples_leaf,random_state = 0)
-                
-                
-            if model == 'Random Forest':
-                from sklearn.ensemble import RandomForestClassifier
-                criterion = st.sidebar.selectbox("criterion",["gini","entropy"])
-                n_estimators = st.sidebar.number_input('n_estimators', min_value=1, max_value=500 , step=1) 
-                max_depth = st.sidebar.slider('max_depth', min_value=1, max_value=10, step=1)
-                classifier = RandomForestClassifier(n_estimators = n_estimators,criterion = criterion, max_depth = max_depth , random_state = 0)
-                
-            if model == 'XgBoostClassifier':
-                from xgboost import XGBClassifier
-                n_estimators = st.sidebar.number_input('n_estimators', min_value=1, max_value=2000)
-                reg_lambda = st.sidebar.number_input('reg_lambda', min_value=0.01, max_value=5.00 , step=0.02)
-                max_depth = st.sidebar.slider('max_depth', min_value=1, max_value=10, step=1)
-                colsample_bytree = st.sidebar.number_input('colsample_bytree', min_value=0.50, max_value=1.00 , step=0.05)
-                classifier = XGBClassifier(n_estimators=n_estimators,reg_lambda=reg_lambda,max_depth=max_depth,colsample_bytree=colsample_bytree)
             
-            if st.button("Train"):
-                with st.spinner('model is training...'):
-                    classifier.fit(X_train, y_train)
-                st.success('Model trained!')
+            if problem_type == 'Classification':
+                models=['Logistic Regression','KNN','SVM','DecisionTree','Random Forest','XgBoostClassifier']
+                model = st.selectbox("Select  a model ",models)
+                if model == 'Logistic Regression':
+                    from sklearn.linear_model import LogisticRegression
+                    classifier = LogisticRegression(random_state = 0)
+                
+                
+                if model == 'KNN':
+                    n_neighbors = st.sidebar.slider('n_neighbors',min_value=1, max_value=5, step=1)
+                    p = st.sidebar.selectbox("P",[1,2,3,4])
+                    from sklearn.neighbors import KNeighborsClassifier
+                    classifier = KNeighborsClassifier(n_neighbors = n_neighbors, metric = 'minkowski', p = p)
+                
+                
+                if model == 'SVM':
+                    from sklearn.svm import SVC 
+                    kernel_list = ['linear','poly','rbf','sigmoid']
+                    kernel = st.sidebar.selectbox("P",kernel_list)
+                    C = st.sidebar.slider('C',min_value=1, max_value=6, step=1)
+                    degree = st.sidebar.slider('Degree',min_value=1, max_value=10, step=1)
+                    classifier=SVC(kernel= kernel, C=C, random_state=0, degree=degree )
+                
+                if model == 'DecisionTree':
+                    from sklearn.tree import DecisionTreeClassifier
+                    criterion = st.sidebar.selectbox("criterion",["gini","entropy"])
+                    max_depth = st.sidebar.slider('max_depth', min_value=1, max_value=10, step=1)
+                    min_samples_leaf = st.sidebar.slider('min_samples_leaf', min_value=1, max_value=10, step=1)
+                    classifier = DecisionTreeClassifier(criterion = criterion, max_depth = max_depth ,min_samples_leaf=min_samples_leaf,random_state = 0)
+                
+                
+                if model == 'Random Forest':
+                    from sklearn.ensemble import RandomForestClassifier
+                    criterion = st.sidebar.selectbox("criterion",["gini","entropy"])
+                    n_estimators = st.sidebar.number_input('n_estimators', min_value=1, max_value=500 , step=1) 
+                    max_depth = st.sidebar.slider('max_depth', min_value=1, max_value=10, step=1)
+                    classifier = RandomForestClassifier(n_estimators = n_estimators,criterion = criterion, max_depth = max_depth , random_state = 0)
+                
+                if model == 'XgBoostClassifier':
+                    from xgboost import XGBClassifier
+                    n_estimators = st.sidebar.number_input('n_estimators', min_value=1, max_value=2000)
+                    reg_lambda = st.sidebar.number_input('reg_lambda', min_value=0.01, max_value=5.00 , step=0.02)
+                    max_depth = st.sidebar.slider('max_depth', min_value=1, max_value=10, step=1)
+                    colsample_bytree = st.sidebar.number_input('colsample_bytree', min_value=0.50, max_value=1.00 , step=0.05)
+                    classifier = XGBClassifier(n_estimators=n_estimators,reg_lambda=reg_lambda,max_depth=max_depth,colsample_bytree=colsample_bytree)
+            
+                if st.button("Train"):
+                    with st.spinner('model is training...'):
+                        classifier.fit(X_train, y_train)
+                    st.success('Model trained!')
                  
-                y_pred = classifier.predict(X_test)
-                from sklearn.metrics import accuracy_score
-                acc=accuracy_score(y_test, y_pred)
-                st.write('val_accuracy:',acc)
-                from sklearn.metrics import confusion_matrix
-                cm = confusion_matrix(y_test, y_pred)
-                st.markdown("**_confusion matrix_**")
-                st.write(cm)
-                y_pred = pd.DataFrame(y_pred)
-                st.dataframe(y_pred)
-                st.write(y_pred[0].value_counts())
-                st.write(y_pred[0].value_counts().plot(kind='bar'))
-                st.pyplot()
-                st.balloons()
-                
-            def download_model(model):
-                output_model = pickle.dumps(model)
-                st.write("model saved as output_model ")
-                b64 = base64.b64encode(output_model).decode()
-                href = f'<a href="data:file/output_model;base64,{b64}">Download Trained Model</a>'
-                st.markdown(href, unsafe_allow_html=True)
-            
-            if st.button("save & Download model"):
-                download_model(classifier)
-                
-                
-            
-                
 
-                       
+                    y_pred = classifier.predict(X_test)
+                    from sklearn.metrics import accuracy_score
+                    acc=accuracy_score(y_test, y_pred)
+                    st.write('val_accuracy:',acc)
+                    from sklearn.metrics import confusion_matrix , classification_report
+                    st.write(classification_report(y_test, y_pred))
+                    cm = confusion_matrix(y_test, y_pred)
+                    st.markdown("**_confusion matrix_**")
+                    st.write(cm)
+                    y_pred = pd.DataFrame(y_pred)
+                    st.dataframe(y_pred)
+                    st.write(y_pred[0].value_counts())
+                    st.write(y_pred[0].value_counts().plot(kind='bar'))
+                    st.pyplot()
+                    st.balloons()
+
+
                 
+                def download_model(model):
+                    output_model = pickle.dumps(model)
+                    st.write("model saved as output_model ")
+                    b64 = base64.b64encode(output_model).decode()
+                    href = f'<a href="data:file/output_model;base64,{b64}">Download Trained Model</a>'
+                    st.markdown(href, unsafe_allow_html=True)
+            
+                if st.button("save & Download model"):
+                    download_model(classifier)
+                
+            if problem_type == 'Regression':  
+                models=['Linear Regression', 'SVR','DecisionTree','Random Forest','XgBoostRegression']
+                model = st.selectbox("Select  a model ",models)
+            
+                if model == 'Linear Regression':
+                    from sklearn.linear_model import LinearRegression
+                    regressor = LinearRegression()
+                    
+                if model== 'SVR':
+                    from sklearn.svm import SVR
+                    kernel_list = ['linear','poly','rbf','sigmoid']
+                    kernel = st.sidebar.selectbox("P",kernel_list)
+                    degree = st.sidebar.slider('Degree',min_value=1, max_value=10, step=1)
+                    regressor = SVR(kernel = kernel , degree = degree )
+                    
+                if model== 'DecisionTree':
+                    from sklearn.tree import DecisionTreeRegressor
+                    criterion = st.sidebar.selectbox("criterion",["mse","friedman_mse","mae"])
+                    max_depth = st.sidebar.slider('max_depth', min_value=1, max_value=10, step=1)
+                    min_samples_leaf = st.sidebar.slider('min_samples_leaf', min_value=1, max_value=10, step=1)
+                    regressor = DecisionTreeRegressor(criterion = criterion, max_depth = max_depth ,min_samples_leaf=min_samples_leaf,random_state = 0)
+                    
+                if model== 'Random Forest':
+                    from sklearn.ensemble import RandomForestRegressor
+                    n_estimators = st.sidebar.number_input('n_estimators', min_value=1, max_value=500 , step=1)
+                    max_depth = st.sidebar.slider('max_depth', min_value=1, max_value=10, step=1)
+                    criterion = st.sidebar.selectbox("criterion",["mse","mae"])
+                    regressor = RandomForestRegressor(n_estimators = n_estimators,criterion = criterion, max_depth = max_depth , random_state = 0)
+                    
+                if model == 'XgBoostRegression':
+                    from xgboost import XGBRegressor
+                    n_estimators = st.sidebar.number_input('n_estimators', min_value=1, max_value=2000)
+                    reg_lambda = st.sidebar.number_input('reg_lambda',min_value=0.01, max_value=5.00 , step=0.02)
+                    max_depth =  st.sidebar.slider('max_depth', min_value=1, max_value=10 , step=1)
+                    booster = st.sidebar.selectbox('booster', ["gbtree","gblinear","dart"])
+                    learning_rate = st.sidebar.number_input('learning_rate', min_value=0.05, max_value=3.00 , step=0.01)
+                    colsample_bytree = st.sidebar.number_input('colsample_bytree', min_value=0.50, max_value=1.00 , step=0.05)
+                    regressor = XGBRegressor(n_estimators=n_estimators,learning_rate=learning_rate,booster=booster,reg_lambda=reg_lambda,max_depth=max_depth,colsample_bytree=colsample_bytree)
+                    
+                if st.button("Train"):
+                    with st.spinner('model is training...'):
+                        regressor.fit(X_train, y_train)
+                    st.success('Model trained!')
+                    
+                    y_pred = regressor.predict(X_test)
+                    from sklearn.metrics import mean_absolute_error , mean_squared_error , r2_score
+                    mae_tr = mean_absolute_error(y_train,regressor.predict(X_train))
+                    mae = mean_absolute_error(y_test, y_pred)
+                    mse = mean_squared_error(y_test, y_pred)
+                    mse_tr = mean_squared_error(y_train,regressor.predict(X_train))
+                    r2 = r2_score(y_test, y_pred)
+                    r2_tr = r2_score(y_train,regressor.predict(X_train))
+                    st.write('mean absolute error:')
+                    st.write('train:',mae_tr,'val:', mae )
+                    st.write('mean squared error:')
+                    st.write('train:',mse_tr,'val:', mse)
+                    st.write('r2:')
+                    st.write('train:',r2_tr,'val:', r2)
+                    y_pred = pd.DataFrame(y_pred)
+                    st.dataframe(y_pred)
+                    st.balloons()
+                    
+                def download_model(model):
+                    output_model = pickle.dumps(model)
+                    st.write("model saved as output_model ")
+                    b64 = base64.b64encode(output_model).decode()
+                    href = f'<a href="data:file/output_model;base64,{b64}">Download Trained Model</a>'
+                    st.markdown(href, unsafe_allow_html=True)
+                    
+                if st.button("save & Download model"):
+                    download_model(regressor)
+                     
+
 if __name__ == '__main__':
     main()
 
