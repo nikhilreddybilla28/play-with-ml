@@ -287,6 +287,7 @@ def main():
                         classifier.fit(X_train, y_train)
                     st.success('Model trained!')
                  
+
                     y_pred = classifier.predict(X_test)
                     from sklearn.metrics import accuracy_score
                     acc=accuracy_score(y_test, y_pred)
@@ -302,7 +303,8 @@ def main():
                     st.write(y_pred[0].value_counts().plot(kind='bar'))
                     st.pyplot()
                     st.balloons()
-                
+
+
                 
                 def download_model(model):
                     output_model = pickle.dumps(model)
