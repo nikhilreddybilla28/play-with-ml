@@ -19,18 +19,39 @@ import altair as alt
 
 import xgboost as xgb
 
+import pickle
+import base64
+
 def main():
     activities =  ["EDA &VIZ" , "Modelling"]
     choice = st.sidebar.selectbox("Select Activities",activities)
+    if st.sidebar.checkbox('About'):
+        st.sidebar.markdown("""
+                           app work in progress .This is a beta release.
+                           
+                           version: b-0.0.1
+                           
+                           initial release:27/6/2020
+                           
+                           helpful suggestions are welcome.
+                           
+                           contact: postme_@hotmail.com
+                           """)
+        
     if choice == 'EDA &VIZ':
         st.title('Play with ML')
+        
+        html_temp1 = """<img src="images/dobby1.jpeg" alt="It's dobby" width="120" height="150">"""
+        st.markdown(html_temp1,unsafe_allow_html=True)
+        st.write("can't see Dobby? I know because i do work from home , You will see me soon")
         html_temp = """
-        <div style="background-color:tomato;padding:12px">
+        <div style="background-color:coral;padding:12px">
         <h2 style="color:white;text-align:center;"> Play with ML App </h2>
+        
         </div>
         """
         st.markdown(html_temp,unsafe_allow_html=True)
-        st.markdown('hey,tired of modelling and tuning ML Models,  wanna play with data & ML modles? Then upload a data here.. **_Dobby , a free elf_** is here for you ')
+        st.markdown('hey,tired of modelling and tuning ML Models,  wanna play with data & ML modles? Then upload a dataset here.. **_Dobby , a free elf_** is here for you ')
         st.subheader("Exploratory Data Analysis & Vizualization ")
         data = st.file_uploader("Upload a Dataset", type=["csv"])
         
@@ -67,7 +88,9 @@ def main():
             
             if st.checkbox("Show Value Counts"):
                 column = st.selectbox("Select a Column to show value counts",all_columns)
+                st.write(df[column].value_counts())
                 st.write(df[column].value_counts().plot(kind='bar'))
+                st.pyplot()
                 
             all_columns_names = df.columns.tolist()
             type_of_plot = st.selectbox("Select Type of Plot",["area","bar","pie","line","hist","box","kde","altair_chart"])
@@ -79,12 +102,14 @@ def main():
                 if type_of_plot == 'area':
                     cust_data = df[selected_columns_names]
                     st.area_chart(cust_data)
+                    st.pyplot()
                     
                 elif type_of_plot == 'bar':
                     cust_data = df[selected_columns_names]
                     st.bar_chart(cust_data)
+                    st.pyplot()
                     
-                elif st.checkbox("Pie Plot"):
+                elif type_of_plot == "Pie Plot":
                     column_to_plot = st.selectbox("Select 1 Column",selected_columns_names)
                     pie_plot = df[column_to_plot].value_counts().plot.pie(autopct="%1.1f%%")
                     st.write(pie_plot)
@@ -93,14 +118,16 @@ def main():
                 elif type_of_plot == 'line':
                     cust_data = df[selected_columns_names]
                     st.line_chart(cust_data)
+                    st.pyplot()
                     
                 elif type_of_plot == 'altair_chart':
                     a = st.selectbox("Select X axis",all_columns)
                     b = st.selectbox("Select Y axis",all_columns)
                     c = st.selectbox("Select a column ",all_columns)
-                    cust_data = pd.DataFram([a,b,c])
+                    cust_data = pd.DataFrame([a,b,c])
                     c = alt.Chart(cust_data).mark_circle().encode(x='a', y='b',size='c', color='c', tooltip=['a', 'b', 'c'])
                     st.altair_chart(c, use_container_width=True)
+                    st.pyplot()
                     
                 elif type_of_plot:
                     cust_plot= df[selected_columns_names].plot(kind=type_of_plot)
@@ -108,6 +135,12 @@ def main():
                     st.pyplot()
                     
     if choice == 'Modelling':
+        html_temp = """
+        <div style="background-color:coral;padding:12px">
+        <h2 style="color:white;text-align:center;"> Play with ML App </h2>
+        </div>
+        """
+        
         st.header('Training')
         st.markdown("**_Hello Iam Dobby. Dobby has no master - Dobby is a free elf_**. Due to SARS-CoV-2 lockdown I dont have much work to do , So Iam here to make your model.")
         data = st.file_uploader("Upload a Dataset", type=["csv"])
@@ -138,8 +171,13 @@ def main():
                 
                 radioval = st.radio("choose type",('ffill','statistical')) 
                 
-                if radioval == 'ffill':
-                    X=X.ffill(axis = 0)
+                if radioval == 'fbfill':
+                    if st.checkbox("fbfill"):
+                        X=X.ffill(axis = 0)
+                    elif st.checkbox("bfill"):
+                        X=X.ffill(axis = 0)
+                    st.markdown('**_missing values are fb filled_**')
+                    
                     
                 elif radioval == 'statistical':
                     if st.checkbox("handle with mean"):
@@ -156,13 +194,21 @@ def main():
                         selected_columns = st.multiselect("Select Columns to handle with mode",all_columns)
                         X[selected_columns] = X[selected_columns].fillna(X[selected_columns].mode()[0],inplace = True)
                         st.write('handled with mode')
+                    st.markdown('**_missing values are filled statistically_**')
                         
                         
             if st.checkbox("One hot encoding"):
-                X = pd.get_dummies(X)
+                if st.checkbox("encode features"):
+                    X = pd.get_dummies(X)
+                    st.write("features are one hot encoded")
+                if st.checkbox("encode labels"):
+                    y = pd.get_dummies(y)
+                    st.write("labels are one hot encoded")
+                    st.dataframe(y)
+                
                 
             st.write('Train - val split')
-            number=st.number_input('test split size', min_value=0.00, max_value=1.00)
+            number=st.number_input('test split size', min_value=0.05, max_value=1.00)
             from sklearn.model_selection import train_test_split  
             X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = number, random_state = 0)
             st.write(X_train.shape)
@@ -170,7 +216,9 @@ def main():
             
             
             if st.checkbox("Feature Scaling"):
-                radioval = st.radio("choose type of feature scaling",('Standardization','Normalization'))
+                radioval = st.radio("choose type of feature scaling",('none','Standardization','Normalization'))
+                if radioval == 'none':
+                    st.write("you skipped feature scaling")
                 if radioval == 'Standardization':
                     from sklearn.preprocessing import StandardScaler
                     sc_X = StandardScaler()
@@ -184,59 +232,89 @@ def main():
                     X_test = min_max_scaler.transform(X_test)
                     
             st.header("Training")
-            models=['Logistic Regression','KNN','SVM','Random Forest']
+            models=['Logistic Regression','KNN','SVM','DecisionTree','Random Forest','XgBoostClassifier']
             model = st.selectbox("Select  a model ",models)
             st.sidebar.markdown("Hyperparameter Tuning")
             
-            if st.button("Train"):
-                st.success("Training  {} model  for {}".format(model ,selected_columns_names))
+            if model == 'Logistic Regression':
+                from sklearn.linear_model import LogisticRegression
+                classifier = LogisticRegression(random_state = 0)
                 
-                if model == 'Logistic Regression':
-                    from sklearn.linear_model import LogisticRegression
-                    classifier = LogisticRegression(random_state = 0)
+                
+            if model == 'KNN':
+                n_neighbors = st.sidebar.slider('n_neighbors',min_value=1, max_value=5, step=1)
+                p = st.sidebar.selectbox("P",[1,2,3,4])
+                from sklearn.neighbors import KNeighborsClassifier
+                classifier = KNeighborsClassifier(n_neighbors = n_neighbors, metric = 'minkowski', p = p)
+                
+                
+            if model == 'SVM':
+                from sklearn.svm import SVC 
+                kernel_list = ['linear','poly','rbf','sigmoid']
+                kernel = st.sidebar.selectbox("P",kernel_list)
+                C = st.sidebar.slider('C',min_value=1, max_value=6, step=1)
+                degree = st.sidebar.slider('Degree',min_value=1, max_value=10, step=1)
+                classifier=SVC(kernel= kernel, C=C, random_state=0, degree=degree )
+                
+            if model == 'DecisionTree':
+                from sklearn.tree import DecisionTreeClassifier
+                criterion = st.sidebar.selectbox("criterion",["gini","entropy"])
+                max_depth = st.sidebar.slider('max_depth', min_value=1, max_value=10, step=1)
+                min_samples_leaf = st.sidebar.slider('min_samples_leaf', min_value=1, max_value=10, step=1)
+                classifier = DecisionTreeClassifier(criterion = criterion, max_depth = max_depth ,min_samples_leaf=min_samples_leaf,random_state = 0)
+                
+                
+            if model == 'Random Forest':
+                from sklearn.ensemble import RandomForestClassifier
+                criterion = st.sidebar.selectbox("criterion",["gini","entropy"])
+                n_estimators = st.sidebar.number_input('n_estimators', min_value=1, max_value=500 , step=1) 
+                max_depth = st.sidebar.slider('max_depth', min_value=1, max_value=10, step=1)
+                classifier = RandomForestClassifier(n_estimators = n_estimators,criterion = criterion, max_depth = max_depth , random_state = 0)
+                
+            if model == 'XgBoostClassifier':
+                from xgboost import XGBClassifier
+                n_estimators = st.sidebar.number_input('n_estimators', min_value=1, max_value=2000)
+                reg_lambda = st.sidebar.number_input('reg_lambda', min_value=0.01, max_value=5.00 , step=0.02)
+                max_depth = st.sidebar.slider('max_depth', min_value=1, max_value=10, step=1)
+                colsample_bytree = st.sidebar.number_input('colsample_bytree', min_value=0.50, max_value=1.00 , step=0.05)
+                classifier = XGBClassifier(n_estimators=n_estimators,reg_lambda=reg_lambda,max_depth=max_depth,colsample_bytree=colsample_bytree)
+            
+            if st.button("Train"):
+                with st.spinner('model is training...'):
                     classifier.fit(X_train, y_train)
-                    
-                if model == 'KNN':
-                    n_neighbors = st.sidebar.slider('n_neighbors',min_value=1, max_value=5, step=1)
-                    p = st.sidebar.selectbox("P",[1,2,3,4])
-                    from sklearn.neighbors import KNeighborsClassifier
-                    classifier = KNeighborsClassifier(n_neighbors = n_neighbors, metric = 'minkowski', p = p)
-                    classifier.fit(X_train, y_train)
-                    
-                if model == 'SVM':
-                    from sklearn.svm import SVC
-                    kernel_list = ['linear','poly','rbf','sigmoid']
-                    kernel = st.sidebar.selectbox("P",kernel_list)
-                    C = st.sidebar.slider('C',min_value=1, max_value=6, step=1)
-                    degree = st.sidebar.slider('Degree',min_value=1, max_value=10, step=1)
-                    classifier=SVC(kernel= kernel, C=C, random_state=0, degree=degree)
-                    classifier.fit(X_train,y_train)
-                    
-                if model == 'Random Forest':
-                    from sklearn.ensemble import RandomForestClassifier
-                    criterion = st.sidebar.selectbox("criterion",["gini","entropy"])
-                    n_estimators = st.sidebar.number_input('n_estimators', min_value=1, max_value=500 , step=1)
-                    max_depth = st.sidebar.slider('max_depth', min_value=1, max_value=10, step=1)
-                    classifier = RandomForestClassifier(n_estimators = n_estimators,criterion = criterion, max_depth = max_depth , random_state = 0)
-                    classifier.fit(X_train, y_train)
-                    
+                st.success('Model trained!')
+                 
                 y_pred = classifier.predict(X_test)
                 from sklearn.metrics import accuracy_score
                 acc=accuracy_score(y_test, y_pred)
                 st.write('val_accuracy:',acc)
-                
                 from sklearn.metrics import confusion_matrix
                 cm = confusion_matrix(y_test, y_pred)
-                st.write('confusion matrix',cm)
-                st.ballons()
-                
+                st.markdown("**_confusion matrix_**")
+                st.write(cm)
                 y_pred = pd.DataFrame(y_pred)
                 st.dataframe(y_pred)
-                st.write(y_pred.value_counts().plot(kind='bar'))
-                st.ballons()
+                st.write(y_pred[0].value_counts())
+                st.write(y_pred[0].value_counts().plot(kind='bar'))
+                st.pyplot()
+                st.balloons()
                 
+            def download_model(model):
+                output_model = pickle.dumps(model)
+                st.write("model saved as output_model ")
+                b64 = base64.b64encode(output_model).decode()
+                href = f'<a href="data:file/output_model;base64,{b64}">Download Trained Model</a>'
+                st.markdown(href, unsafe_allow_html=True)
+            
+            if st.button("save & Download model"):
+                download_model(classifier)
+                
+                
+            
                 
 
+                       
+                
 if __name__ == '__main__':
     main()
 
