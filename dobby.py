@@ -348,8 +348,8 @@ def main():
                     from xgboost import XGBRegressor
                     n_estimators = st.sidebar.number_input('n_estimators', min_value=1, max_value=2000)
                     reg_lambda = st.sidebar.number_input('reg_lambda',min_value=0.01, max_value=5.00 , step=0.02)
-                    max_depth = st.sidebar.slider('max_depth', min_value=1, max_value=10, step=1)
-                    booster = st.sidebar.selectbox('booster',["gbtree","gblinear","dart"])
+                    max_depth =  st.sidebar.slider('max_depth', min_value=1, max_value=10 , step=1)
+                    booster = st.sidebar.selectbox('booster', ["gbtree","gblinear","dart"])
                     learning_rate = st.sidebar.number_input('learning_rate', min_value=0.05, max_value=3.00 , step=0.01)
                     colsample_bytree = st.sidebar.number_input('colsample_bytree', min_value=0.50, max_value=1.00 , step=0.05)
                     regressor = XGBRegressor(n_estimators=n_estimators,learning_rate=learning_rate,booster=booster,reg_lambda=reg_lambda,max_depth=max_depth,colsample_bytree=colsample_bytree)
