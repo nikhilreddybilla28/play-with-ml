@@ -43,7 +43,6 @@ def main():
         
         html_temp1 = """<img src="images/dobby1.jpeg" alt="It's dobby" width="120" height="150">"""
         st.markdown(html_temp1,unsafe_allow_html=True)
-        st.write("can't see Dobby? I know because i do work from home , You will see me soon")
         html_temp = """
         <div style="background-color:coral;padding:12px">
         <h2 style="color:white;text-align:center;"> Play with ML App </h2>
