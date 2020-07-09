@@ -9,7 +9,7 @@ It preprocess the data , Trains and saves classification problems and provides o
 ### visualization
 ![demo](gifs/2.gif)
 
-###Training
+### Training
 ![demo](gifs/3.gif)
 
 ## Dependancies
