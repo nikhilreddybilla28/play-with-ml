@@ -5,9 +5,7 @@ This applications helps in doing EDA , plotting  without any code written explic
 It preprocess the data , Trains and saves classification problems and provides option to download the saved model as pickle file . 
 
 
-<video width="480" height="320" controls>
-  <source src= "https://github.com/nikhilreddybilla28/play-with-ml/blob/master/streamlitvid.mp4" type="video/mp4">
-</video>
+![Shopping Cart Demo](streamlitvid.mp4)
 
 ## Dependancies
 
