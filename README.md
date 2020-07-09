@@ -18,3 +18,4 @@ pip install -r requirements.txt
 
 ## Run
 streamlit run dobby.py
+### [playwithml](https://play-with-ml.herokuapp.com/)
