@@ -1,3 +1,6 @@
+# play with ml
+![Python 3.6](https://img.shields.io/badge/Python-3.6-brightgreen.svg) ![Library](https://img.shields.io/badge/Library-Streamlit-orange.svg) ![](https://img.shields.io/badge/Deployed_on-Heroku-blue.svg) 
+
 Streamlit’s open-source app framework is the easiest way for data scientists and machine learning engineers to create beautiful, performant apps in only a few hours!  All in pure Python. All for free.
 
 ![demo](gifs/1.gif)
