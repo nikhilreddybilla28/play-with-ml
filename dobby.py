@@ -195,6 +195,8 @@ def main():
                         X[selected_columns] = X[selected_columns].fillna(X[selected_columns].mode()[0],inplace = True)
                         st.write('handled with mode')
                     st.markdown('**_missing values are filled statistically_**')
+               st.write('missing values:' , X.isnull().sum())
+                
                       
                         
             if st.checkbox("One hot encoding"):
