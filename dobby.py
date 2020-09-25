@@ -57,12 +57,12 @@ def main():
         if data is not None:
             st.subheader('EDA')
             df = pd.read_csv(data)
-            st.dataframe(df.head())
+            #st.dataframe(df.head())
             st.write('shape:',df.shape)
             
             if st.checkbox("Show Columns"):
                 all_columns = df.columns.to_list()
-                st.write(all_columns)
+                #st.write(all_columns)
                 
             if st.checkbox("Null values"):
                 st.write(df.isnull().sum())
@@ -77,7 +77,7 @@ def main():
                 all_columns_names = df.columns.tolist()
                 selected_columns = st.multiselect("Select Columns",all_columns)
                 df1 = df[selected_columns]
-                st.dataframe(df1)
+                #st.dataframe(df1)
                 
             if st.checkbox("Correlation Plot(Seaborn)"):
                 st.write(sns.heatmap(df.corr(),annot=True))
@@ -169,11 +169,12 @@ def main():
             if st.checkbox("Handling missing values"):
                 
                 radioval = st.radio("choose type",('ffill','statistical')) 
-                
-                if radioval == 'fbfill':
+                if radioval == 'None':
+                    print('handling missing values skipped')
+                    
+                elif radioval == 'fbfill':
                     if st.checkbox("fbfill"):
                         X=X.ffill(axis = 0)
-                    elif st.checkbox("bfill"):
                         X=X.ffill(axis = 0)
                     st.markdown('**_missing values are fb filled_**')
                     
@@ -194,7 +195,7 @@ def main():
                         X[selected_columns] = X[selected_columns].fillna(X[selected_columns].mode()[0],inplace = True)
                         st.write('handled with mode')
                     st.markdown('**_missing values are filled statistically_**')
-                        
+                      
                         
             if st.checkbox("One hot encoding"):
                 if st.checkbox("encode features"):
