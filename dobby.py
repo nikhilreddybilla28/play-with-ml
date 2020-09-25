@@ -188,6 +188,11 @@ def main():
                     elif st.checkbox("handle with median"):
                         selected_columns = st.multiselect("Select Columns to handle with median",all_columns)
                         X[selected_columns] = X[selected_columns].fillna(X[selected_columns].median(),inplace = True)
+               elif radioval == 'statistical':
+                    if st.checkbox("handle with mean"):
+                        selected_columns = st.multiselect("Select Columns to handle with mean ",all_columns)
+                        X[selected_columns] = X[selected_columns].fillna(X[selected_columns].mean(),inplace = True)
+                        st.write('handled with mean')
                         st.write('handled with median')
                         
                     elif st.checkbox("handle with mode"):
@@ -195,6 +200,8 @@ def main():
                         X[selected_columns] = X[selected_columns].fillna(X[selected_columns].mode()[0],inplace = True)
                         st.write('handled with mode')
                     st.markdown('**_missing values are filled statistically_**')
+               st.write('missing values:' , X.isnull().sum())
+                
                       
                         
             if st.checkbox("One hot encoding"):
