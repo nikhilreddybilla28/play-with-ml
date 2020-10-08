@@ -57,7 +57,6 @@ def main():
         if data is not None:
             st.subheader('EDA')
             df = pd.read_csv(data)
-            #st.dataframe(df.head())
             st.write('shape:',df.shape)
             
             if st.checkbox("Show Columns"):
@@ -195,7 +194,7 @@ def main():
                         X[selected_columns] = X[selected_columns].fillna(X[selected_columns].mode()[0],inplace = True)
                         st.write('handled with mode')
                     st.markdown('**_missing values are filled statistically_**')
-                      
+                st.write('missing values:' , X.isnull().sum())         
                         
             if st.checkbox("One hot encoding"):
                 if st.checkbox("encode features"):
@@ -208,7 +207,7 @@ def main():
                 
                 
             st.write('Train - val split')
-            number=st.number_input('test split size', min_value=0.05, max_value=1.00)
+            number=st.number_input('test split size', min_value=0.1, max_value=1.00)
             from sklearn.model_selection import train_test_split  
             X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = number, random_state = 0)
             st.write(X_train.shape)
