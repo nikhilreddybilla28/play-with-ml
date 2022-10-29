@@ -140,7 +140,7 @@ def main():
         """
         
         st.header('Training')
-        st.markdown("**_Hello Iam Dobby. Dobby has no master - Dobby is a free elf_**. Due to SARS-CoV-2 lockdown I dont have much work to do , So Iam here to make your model.")
+        st.markdown("**_Hello Iam Dobby. Dobby has no master - Dobby is a free elf_**. Iam here to make your model.")
         data = st.file_uploader("Upload a Dataset", type=["csv"])
         
         if data is not None:
