@@ -242,7 +242,7 @@ def main():
                 
                 
             if model == 'KNN':
-                n_neighbors = st.sidebar.slider('n_neighbors',min_value=1, max_value=5, step=1)
+                n_neighbors = st.sidebar.slider('n_neighbors',min_value=1, max_value=10, step=1)
                 p = st.sidebar.selectbox("P",[1,2,3,4])
                 from sklearn.neighbors import KNeighborsClassifier
                 classifier = KNeighborsClassifier(n_neighbors = n_neighbors, metric = 'minkowski', p = p)
